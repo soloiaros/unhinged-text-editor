@@ -12,19 +12,19 @@ const settings = {
 let circles, elCanvas, circleX, circleY, font, bgData;
 
 const sketch = async ({ p5, canvas, width, height }) => {
-
+  p5.pixelDensity(1);
   elCanvas = canvas;
   setUpEventListeners();
   font = await new Promise((resolve, reject) => {
     p5.loadFont(GoogleSansFlex, resolve, reject);
   })
 
-  const circleWidth = 20;
-  const circleGap = 20;
+  const circleWidth = 5;
+  const circleGap = 3;
   const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (circleWidth + circleGap));
   const minSegmentLength = 10;
-  const maxSegmentLength = 50;
-  const segmentGap = 30;
+  const maxSegmentLength = 15;
+  const segmentGap = 10;
 
   circles = [];
   for (let i = 0; i < circleNum; i++) {
@@ -43,13 +43,13 @@ const sketch = async ({ p5, canvas, width, height }) => {
     p5.background(212);
     p5.fill(0);
 
-    renderCircles({ p5, x: circleX, y: circleY, circleWidth });
+    renderCircles({ p5, x: circleX, y: circleY, circleWidth, canvasWidth: width, canvasHeight: height });
 
-    p5.image(textCanvas, 0, 0);
+    // p5.image(textCanvas, 0, 0);
   };
 }
 
-function renderCircles({ p5, x, y, circleWidth }) {
+function renderCircles({ p5, x, y, circleWidth, canvasWidth, canvasHeight }) {
   p5.noFill();
   p5.stroke(0);
   p5.strokeWeight(circleWidth);
@@ -59,7 +59,7 @@ function renderCircles({ p5, x, y, circleWidth }) {
   
   circles.forEach(circle => {
     if (circle === circles[0]) p5.circle(0, 0, circleWidth);
-    else circle.draw(p5);
+    else circle.draw({ p5, centerX: x, centerY: y, canvasWidth, canvasHeight });
   })
 
   p5.pop();
@@ -77,16 +77,25 @@ class Circle {
     this.gapTheta = segmentGap / radius;
 
     this.initAngle = random.value(0, Math.PI * 2);
-    this.finalAngle = this.initAngle + Math.PI * 2 - this.gapTheta;
   }
 
-  draw(p5) {
+  draw({ p5, centerX, centerY, canvasWidth, canvasHeight }) {
     const segmentsNum = Math.ceil(Math.PI * 2 / (this.segmentTheta + this.gapTheta));
     let currAngle = this.initAngle;
+
     for (let j = 0; j < segmentsNum; j++) {
       if (currAngle > this.finalAngle) break;
-      const endAngle = currAngle + this.segmentTheta > this.finalAngle ? this.finalAngle : currAngle + this.segmentTheta;
-      p5.arc(0, 0, this.radius * 2, this.radius * 2, currAngle, endAngle);
+
+      const currX = Math.floor(centerX + this.radius * Math.cos(currAngle));
+      const currY = Math.floor(centerY + this.radius * Math.sin(currAngle));
+
+      if (currX >= 0 && currX < canvasWidth && currY >= 0 && currY < canvasHeight) {
+        const pixelIndex = (currY * canvasWidth + currX) * 4;
+        if (bgData && bgData[pixelIndex] > 0) {
+          const endAngle = currAngle + this.segmentTheta;
+          p5.arc(0, 0, this.radius * 2, this.radius * 2, currAngle, endAngle);
+        }
+      }
       currAngle += this.segmentTheta + this.gapTheta;
     }
   }
@@ -94,12 +103,12 @@ class Circle {
 
 function renderText({ p5, width, height, text }) {
   const canvas = p5.createGraphics(width, height);
+  canvas.pixelDensity(1);
   canvas.textFont(font);
   canvas.textAlign(p5.CENTER, p5.CENTER);
-  canvas.textWrap('WORD');
   canvas.textSize(260);
-  canvas.fill(0);
-  canvas.text(text, 0, 0, width, height);
+  canvas.fill(255);
+  canvas.text(text, width / 2, height / 2);
   return canvas;
 }
 
