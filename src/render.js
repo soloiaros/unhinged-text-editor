@@ -17,38 +17,25 @@ let params = {
   circleWidth: 10,
   circleGap: 10,
   maxSegmentLength: 15,
-  segmentGap: 10
+  segmentGap: 10,
+  text: "This Is Smth New",
 };
-
-const initCircles = (width, height) => {
-  const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (params.circleWidth + params.circleGap));
-  circles = [];
-  for (let i = 0; i < circleNum; i++) {
-    const radius = i * (params.circleWidth + params.circleGap) + params.circleWidth / 2;
-    circles.push(new Circle({ 
-      radius, 
-      maxSegmentLength: params.maxSegmentLength, 
-      minSegmentLength: params.maxSegmentLength,
-      segmentGap: params.segmentGap 
-    }));
-  }
-}
 
 const sketch = async ({ p5, canvas, width, height }) => {
   p5.pixelDensity(1);
   elCanvas = canvas;
-  setUpEventListeners(width, height);
+  setUpEventListeners({ p5, width, height });
   
   font = await new Promise((resolve, reject) => {
     p5.loadFont(GoogleSansFlex, resolve, reject);
   })
 
-  initCircles(width, height);
+  initCircles({ p5, width, height });
 
   circleX = width * 0.5;
   circleY = height * 0.5;
 
-  let textCanvas = renderText({ p5, width, height, text: 'That Is Smth New' });
+  let textCanvas = renderText({ p5, width, height });
   textCanvas.loadPixels();
   bgData = textCanvas.pixels;
   
@@ -113,18 +100,32 @@ class Circle {
   }
 }
 
-function renderText({ p5, width, height, text }) {
+function initCircles ({ p5, width, height }) {
+  const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (params.circleWidth + params.circleGap));
+  circles = [];
+  for (let i = 0; i < circleNum; i++) {
+    const radius = i * (params.circleWidth + params.circleGap) + params.circleWidth / 2;
+    circles.push(new Circle({ 
+      radius, 
+      maxSegmentLength: params.maxSegmentLength, 
+      minSegmentLength: params.maxSegmentLength,
+      segmentGap: params.segmentGap 
+    }));
+  }
+}
+
+function renderText({ p5, width, height }) {
   const canvas = p5.createGraphics(width, height);
   canvas.pixelDensity(1);
   canvas.textFont(font);
   canvas.textAlign(p5.CENTER, p5.CENTER);
   canvas.textSize(260);
   canvas.fill(255);
-  canvas.text(text, 0, 0, width, height);
+  canvas.text(params.text, 0, 0, width, height);
   return canvas;
 }
 
-const setUpEventListeners = (width, height) => {
+const setUpEventListeners = ({ p5, width, height }) => {
   elCanvas.addEventListener('click', (e) => {
     const x = (e.offsetX / elCanvas.offsetWidth) * elCanvas.width;
     const y = (e.offsetY / elCanvas.offsetHeight) * elCanvas.height;
@@ -178,11 +179,20 @@ const setUpEventListeners = (width, height) => {
         params[id] = val;
         
         if (['circleWidth', 'circleGap', 'maxSegmentLength', 'segmentGap'].includes(id)) {
-          initCircles(width, height);
+          initCircles({ p5, width, height });
         }
       });
     }
   });
+
+  const textInput = document.getElementById('textInput');
+  textInput.addEventListener('input', () => {
+    params.text = textInput.value;
+    const textCanvas = renderText({ p5, width, height });
+    textCanvas.loadPixels();
+    bgData = textCanvas.pixels;
+    initCircles({ p5, width, height });
+  })
 }
 
 const start = () => {
