@@ -30,7 +30,7 @@ const sketch = async ({ p5, canvas, width, height }) => {
     p5.loadFont(GoogleSansFlex, resolve, reject);
   })
 
-  initCircles({ p5, width, height });
+  initCircles({ width, height });
 
   circleX = width * 0.5;
   circleY = height * 0.5;
@@ -100,7 +100,7 @@ class Circle {
   }
 }
 
-function initCircles ({ p5, width, height }) {
+function initCircles ({ width, height }) {
   const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (params.circleWidth + params.circleGap));
   circles = [];
   for (let i = 0; i < circleNum; i++) {
@@ -181,7 +181,7 @@ const setUpEventListeners = ({ p5, width, height }) => {
         params[id] = val;
         
         if (['circleWidth', 'circleGap', 'maxSegmentLength', 'segmentGap'].includes(id)) {
-          initCircles({ p5, width, height });
+          initCircles({ width, height });
         }
       });
     }
@@ -197,7 +197,7 @@ const setUpEventListeners = ({ p5, width, height }) => {
         const textCanvas = renderText({ p5, width, height });
         textCanvas.loadPixels();
         bgData = textCanvas.pixels;
-        initCircles({ p5, width, height });
+        initCircles({ width, height });
       }, 250);
     });
   }
