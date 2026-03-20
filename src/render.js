@@ -58,13 +58,16 @@ class Circle {
     this.gapTheta = segmentGap / radius;
 
     this.initAngle = random.value(0, Math.PI * 2);
+    this.finalAngle = this.initAngle + Math.PI * 2 - this.gapTheta;
   }
 
   draw(p5) {
-    const segmentsNum = Math.floor(Math.PI * 2 / (this.segmentTheta + this.gapTheta));
+    const segmentsNum = Math.ceil(Math.PI * 2 / (this.segmentTheta + this.gapTheta));
     let currAngle = this.initAngle;
     for (let j = 0; j < segmentsNum; j++) {
-      p5.arc(0, 0, this.radius * 2, this.radius * 2, currAngle, currAngle + this.segmentTheta);
+      if (currAngle > this.finalAngle) break;
+      const endAngle = currAngle + this.segmentTheta > this.finalAngle ? this.finalAngle : currAngle + this.segmentTheta;
+      p5.arc(0, 0, this.radius * 2, this.radius * 2, currAngle, endAngle);
       currAngle += this.segmentTheta + this.gapTheta;
     }
   }
