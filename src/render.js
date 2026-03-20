@@ -2,10 +2,12 @@ import canvasSketch from 'canvas-sketch';
 import p5 from 'p5';
 import random from 'canvas-sketch-util/random';
 import GoogleSansFlex from './fonts/GoogleSansFlex.ttf';
+import './style.scss';
 
 const settings = {
   p5: { p5 },
   animate: true,
+  fps: 12,
 };
 
 let circles, elCanvas, circleX, circleY, font, bgData;
@@ -38,19 +40,19 @@ const sketch = async ({ p5, canvas, width, height }) => {
   textCanvas.loadPixels();
   bgData = textCanvas.pixels;
   
-  return ({ p5, width, height }) => {
-    p5.background(212);
-    p5.fill(0);
+  return ({ p5, width, height, frame }) => {
+    p5.background(10);
 
     renderCircles({ p5, x: circleX, y: circleY, circleWidth, canvasWidth: width, canvasHeight: height });
 
+    //for debugging text uncomment
     // p5.image(textCanvas, 0, 0);
   };
 }
 
 function renderCircles({ p5, x, y, circleWidth, canvasWidth, canvasHeight }) {
   p5.noFill();
-  p5.stroke(0);
+  p5.stroke(240);
   p5.strokeWeight(circleWidth);
   
   p5.push();
@@ -117,6 +119,14 @@ const setUpEventListeners = () => {
     circleX = x;
     circleY = y;
   })
+
+  const toggle = document.getElementById('controlsToggle');
+  const controls = document.getElementById('controls');
+  if (toggle && controls) {
+    toggle.addEventListener('click', () => {
+      controls.classList.toggle('collapsed');
+    });
+  }
 }
 
 const start = () => {
