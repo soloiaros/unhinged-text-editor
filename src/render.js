@@ -12,8 +12,8 @@ const settings = {
 
 let circles, elCanvas, circleX, circleY, font, bgData;
 let params = {
-  bgColor: '#0a0a0a',
-  strokeColor: '#f0f0f0',
+  bgColor: '#f0f0f0',
+  strokeColor: '#343231',
   circleWidth: 10,
   circleGap: 10,
   maxSegmentLength: 15,
@@ -137,6 +137,18 @@ const setUpEventListeners = (width, height) => {
   if (toggle && controls) {
     toggle.addEventListener('click', () => {
       controls.classList.toggle('collapsed');
+    });
+  }
+
+  const animationToggle = document.getElementById('animationToggle');
+  const animationSettings = document.getElementById('animationSettings');
+  if (animationToggle && animationSettings) {
+    animationToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        animationSettings.classList.remove('hidden');
+      } else {
+        animationSettings.classList.add('hidden');
+      }
     });
   }
 
