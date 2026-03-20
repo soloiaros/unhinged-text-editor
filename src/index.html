@@ -2,8 +2,42 @@
 <html>
     <head>
         <meta charset="utf-8" />
-        <title>Webpack App</title>
+        <title>Canvas Text Morphing</title>
     </head>
     <body>
+        <div id="controls" class="controls">
+            <div class="controls-header" id="controlsToggle">
+                <strong>Controls</strong>
+                <svg class="toggle-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                </svg>
+            </div>
+            <div class="controls-content">
+                <div class="control-group">
+                    <label>Background Color</label>
+                    <input type="color" id="bgColor" value="#0a0a0a">
+                </div>
+                <div class="control-group">
+                    <label>Stroke Color</label>
+                    <input type="color" id="strokeColor" value="#f0f0f0">
+                </div>
+                <div class="control-group">
+                    <label>Circle Width</label>
+                    <input type="range" id="circleWidth" min="1" max="20" value="5">
+                </div>
+                <div class="control-group">
+                    <label>Circle Gap</label>
+                    <input type="range" id="circleGap" min="0" max="20" value="3">
+                </div>
+                <div class="control-group">
+                    <label>Max Segment Length</label>
+                    <input type="range" id="maxSegmentLength" min="5" max="100" value="15">
+                </div>
+                <div class="control-group">
+                    <label>Segment Gap</label>
+                    <input type="range" id="segmentGap" min="0" max="50" value="10">
+                </div>
+            </div>
+        </div>
     </body>
 </html>
