@@ -153,18 +153,20 @@ const setUpEventListeners = ({ p5, width, height }) => {
     });
   }
 
+  const onMouseMove = (e) => {
+      const x = (e.offsetX / elCanvas.offsetWidth) * elCanvas.width;
+      const y = (e.offsetY / elCanvas.offsetHeight) * elCanvas.height;
+      circleX = x;
+      circleY = y;
+  }
+
   const interactionToggle = document.getElementById('interactionToggle');
   if (interactionToggle) {
     interactionToggle.addEventListener('change', (e) => {
       if (e.target.checked) {
-        elCanvas.addEventListener('mousemove', (e) => {
-          const x = (e.offsetX / elCanvas.offsetWidth) * elCanvas.width;
-          const y = (e.offsetY / elCanvas.offsetHeight) * elCanvas.height;
-          circleX = x;
-          circleY = y;
-        });
+        elCanvas.addEventListener('mousemove', onMouseMove);
       } else {
-        elCanvas.removeEventListener('mousemove');
+        elCanvas.removeEventListener('mousemove', onMouseMove);
       }
     })
   }
