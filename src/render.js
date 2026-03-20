@@ -186,13 +186,19 @@ const setUpEventListeners = ({ p5, width, height }) => {
   });
 
   const textInput = document.getElementById('textInput');
-  textInput.addEventListener('input', () => {
-    params.text = textInput.value;
-    const textCanvas = renderText({ p5, width, height });
-    textCanvas.loadPixels();
-    bgData = textCanvas.pixels;
-    initCircles({ p5, width, height });
-  })
+  let textTimeout;
+  if (textInput) {
+    textInput.addEventListener('input', () => {
+      params.text = textInput.value;
+      clearTimeout(textTimeout);
+      textTimeout = setTimeout(() => {
+        const textCanvas = renderText({ p5, width, height });
+        textCanvas.loadPixels();
+        bgData = textCanvas.pixels;
+        initCircles({ p5, width, height });
+      }, 250);
+    });
+  }
 }
 
 const start = () => {
