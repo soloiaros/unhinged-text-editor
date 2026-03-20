@@ -6,7 +6,6 @@ import GoogleSansFlex from './fonts/GoogleSansFlex.ttf';
 const settings = {
   p5: { p5 },
   animate: true,
-  dimensions: [1080, 1080],
 };
 
 let circles, elCanvas, circleX, circleY, font, bgData;
@@ -58,8 +57,7 @@ function renderCircles({ p5, x, y, circleWidth, canvasWidth, canvasHeight }) {
   p5.translate(x, y);
   
   circles.forEach(circle => {
-    if (circle === circles[0]) p5.circle(0, 0, circleWidth);
-    else circle.draw({ p5, centerX: x, centerY: y, canvasWidth, canvasHeight });
+    circle.draw({ p5, centerX: x, centerY: y, canvasWidth, canvasHeight });
   })
 
   p5.pop();
@@ -108,7 +106,7 @@ function renderText({ p5, width, height, text }) {
   canvas.textAlign(p5.CENTER, p5.CENTER);
   canvas.textSize(260);
   canvas.fill(255);
-  canvas.text(text, width / 2, height / 2);
+  canvas.text(text, 0, 0, width, height);
   return canvas;
 }
 
