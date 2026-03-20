@@ -63,6 +63,41 @@ canvas {
     flex-direction: column;
     gap: 5px;
 
+    &.horizontal {
+      flex-direction: row;
+      align-items: center;
+      gap: 10px;
+      padding: 0.5rem 0;
+      
+      input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+      }
+
+      label {
+        text-transform: none;
+        opacity: 1;
+        cursor: pointer;
+      }
+    }
+
+    &.inline {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+
+      label {
+        margin-bottom: 0;
+        white-space: nowrap;
+      }
+
+      select {
+        flex: 1;
+        max-width: 80px;
+      }
+    }
+
     &:last-child {
       margin-bottom: 0;
     }
@@ -85,6 +120,30 @@ canvas {
       border: none;
       background: transparent;
       cursor: pointer;
+    }
+
+    select {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: white;
+      border-radius: 4px;
+      padding: 4px;
+      font-size: 11px;
+      cursor: pointer;
+      outline: none;
+
+      option {
+        background: rgb(40, 40, 40);
+      }
+    }
+  }
+
+  .animation-settings {
+    padding-left: 2rem;
+    margin-top: 10px;
+
+    &.hidden {
+      display: none;
     }
   }
 }
