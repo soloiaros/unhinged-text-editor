@@ -35,9 +35,39 @@
                 </div>
                 <div class="control-group">
                     <label>Segment Gap</label>
-                    <input type="range" id="segmentGap" min="3" max="30" value="5">
+                    <input type="range" id="segmentGap" min="10" max="50" value="10">
                 </div>
-            </div>
-        </div>
-    </body>
-</html>
+
+                <div class="interaction-section">
+                    <div class="control-group horizontal">
+                        <input type="checkbox" id="interactionToggle">
+                        <label for="animationToggle">Follow Cursor</label>
+                    </div>
+                </div>
+
+                <div class="animation-section">
+                    <div class="control-group horizontal">
+                        <input type="checkbox" id="animationToggle">
+                        <label for="animationToggle">Animation</label>
+                    </div>
+                    <div id="animationSettings" class="animation-settings hidden">
+                        <div class="control-group inline">
+                            <label>Anim.Type</label>
+                            <select id="animationType">
+                                <option value="default">Default</option>
+                            </select>
+                        </div>
+                        <div class="control-group inline">
+                            <label>Anim.Speed</label>
+                            <select id="animationSpeed">
+                                <option value="slow">Slow</option>
+                                <option value="normal" selected>Normal</option>
+                                <option value="fast">Fast</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                </div>
+                </body>
+                </html>
