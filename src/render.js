@@ -11,27 +11,39 @@ const settings = {
 };
 
 let circles, elCanvas, circleX, circleY, font, bgData;
+let params = {
+  bgColor: '#0a0a0a',
+  strokeColor: '#f0f0f0',
+  circleWidth: 10,
+  circleGap: 10,
+  maxSegmentLength: 15,
+  segmentGap: 10
+};
+
+const initCircles = (width, height) => {
+  const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (params.circleWidth + params.circleGap));
+  circles = [];
+  for (let i = 0; i < circleNum; i++) {
+    const radius = i * (params.circleWidth + params.circleGap) + params.circleWidth / 2;
+    circles.push(new Circle({ 
+      radius, 
+      maxSegmentLength: params.maxSegmentLength, 
+      minSegmentLength: params.maxSegmentLength,
+      segmentGap: params.segmentGap 
+    }));
+  }
+}
 
 const sketch = async ({ p5, canvas, width, height }) => {
   p5.pixelDensity(1);
   elCanvas = canvas;
-  setUpEventListeners();
+  setUpEventListeners(width, height);
+  
   font = await new Promise((resolve, reject) => {
     p5.loadFont(GoogleSansFlex, resolve, reject);
   })
 
-  const circleWidth = 5;
-  const circleGap = 3;
-  const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (circleWidth + circleGap));
-  const minSegmentLength = 10;
-  const maxSegmentLength = 15;
-  const segmentGap = 10;
-
-  circles = [];
-  for (let i = 0; i < circleNum; i++) {
-    const radius = i * (circleWidth + circleGap) + circleWidth / 2;
-    circles.push(new Circle({ radius, minSegmentLength, maxSegmentLength, segmentGap }));
-  }
+  initCircles(width, height);
 
   circleX = width * 0.5;
   circleY = height * 0.5;
@@ -40,8 +52,8 @@ const sketch = async ({ p5, canvas, width, height }) => {
   textCanvas.loadPixels();
   bgData = textCanvas.pixels;
   
-  return ({ p5, width, height, frame }) => {
-    p5.background(10);
+  return ({ p5, width, height }) => {
+    p5.background(params.bgColor);
 
     renderCircles({ p5, x: circleX, y: circleY, circleWidth, canvasWidth: width, canvasHeight: height });
 
@@ -50,10 +62,10 @@ const sketch = async ({ p5, canvas, width, height }) => {
   };
 }
 
-function renderCircles({ p5, x, y, circleWidth, canvasWidth, canvasHeight }) {
+function renderCircles({ p5, x, y, canvasWidth, canvasHeight }) {
   p5.noFill();
-  p5.stroke(240);
-  p5.strokeWeight(circleWidth);
+  p5.stroke(params.strokeColor);
+  p5.strokeWeight(params.circleWidth);
   
   p5.push();
   p5.translate(x, y);
@@ -112,7 +124,7 @@ function renderText({ p5, width, height, text }) {
   return canvas;
 }
 
-const setUpEventListeners = () => {
+const setUpEventListeners = (width, height) => {
   elCanvas.addEventListener('click', (event) => {
     const x = (event.offsetX / elCanvas.offsetWidth) * elCanvas.width;
     const y = (event.offsetY / elCanvas.offsetHeight) * elCanvas.height;
@@ -127,6 +139,22 @@ const setUpEventListeners = () => {
       controls.classList.toggle('collapsed');
     });
   }
+
+  const ids = ['bgColor', 'strokeColor', 'circleWidth', 'circleGap', 'maxSegmentLength', 'segmentGap'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('input', (e) => {
+        let val = e.target.value;
+        if (e.target.type === 'range') val = parseFloat(val);
+        params[id] = val;
+        
+        if (['circleWidth', 'circleGap', 'maxSegmentLength', 'segmentGap'].includes(id)) {
+          initCircles(width, height);
+        }
+      });
+    }
+  });
 }
 
 const start = () => {
@@ -134,4 +162,3 @@ const start = () => {
 }
 
 start();
-
