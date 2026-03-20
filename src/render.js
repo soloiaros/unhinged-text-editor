@@ -8,13 +8,17 @@ const settings = {
   dimensions: [1080, 1080],
 };
 
-let circles;
+let circles, elCanvas, circleX, circleY;
 
-const sketch = ({ width, height }) => {
+const sketch = ({ canvas, width, height }) => {
+
+  elCanvas = canvas;
+  setUpEventListeners();
 
   const circleWidth = 20;
   const circleGap = 20;
-  const circleNum = Math.floor(Math.max(width / (circleWidth + circleGap), height / (circleWidth + circleGap)));
+  const circleNum = Math.floor(Math.sqrt(width * width + height * height) / (circleWidth + circleGap));
+  console.log(circleNum)
   const segmentLength = 50;
   const segmentGap = 30;
 
@@ -23,12 +27,15 @@ const sketch = ({ width, height }) => {
     const radius = i * (circleWidth + circleGap) + circleWidth / 2;
     circles.push(new Circle({ radius, segmentLength, segmentGap }));
   }
+
+  circleX = width * 0.5;
+  circleY = height * 0.5;
   
   return ({ p5, width, height }) => {
     p5.background(212);
     p5.fill(0);
 
-    renderCircles({ p5, x: width * 0.5, y: height * 0.5, circleWidth });
+    renderCircles({ p5, x: circleX, y: circleY, circleWidth });
   };
 }
 
@@ -73,4 +80,18 @@ class Circle {
   }
 }
 
-canvasSketch(sketch, settings);
+const setUpEventListeners = () => {
+  elCanvas.addEventListener('click', (event) => {
+    const x = (event.offsetX / elCanvas.offsetWidth) * elCanvas.width;
+    const y = (event.offsetY / elCanvas.offsetHeight) * elCanvas.height;
+    circleX = x;
+    circleY = y;
+  })
+}
+
+const start = () => {
+  canvasSketch(sketch, settings);
+}
+
+start();
+
