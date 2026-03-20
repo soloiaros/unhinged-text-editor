@@ -52,7 +52,7 @@ const sketch = async ({ p5, canvas, width, height }) => {
   textCanvas.loadPixels();
   bgData = textCanvas.pixels;
   
-  return ({ p5, width, height }) => {
+  return ({ p5, width, height, frame }) => {
     p5.background(params.bgColor);
 
     renderCircles({ p5, x: circleX, y: circleY, circleWidth, canvasWidth: width, canvasHeight: height });
@@ -125,9 +125,9 @@ function renderText({ p5, width, height, text }) {
 }
 
 const setUpEventListeners = (width, height) => {
-  elCanvas.addEventListener('click', (event) => {
-    const x = (event.offsetX / elCanvas.offsetWidth) * elCanvas.width;
-    const y = (event.offsetY / elCanvas.offsetHeight) * elCanvas.height;
+  elCanvas.addEventListener('click', (e) => {
+    const x = (e.offsetX / elCanvas.offsetWidth) * elCanvas.width;
+    const y = (e.offsetY / elCanvas.offsetHeight) * elCanvas.height;
     circleX = x;
     circleY = y;
   })
@@ -150,6 +150,22 @@ const setUpEventListeners = (width, height) => {
         animationSettings.classList.add('hidden');
       }
     });
+  }
+
+  const interactionToggle = document.getElementById('interactionToggle');
+  if (interactionToggle) {
+    interactionToggle.addEventListener('change', (e) => {
+      if (e.target.checked) {
+        elCanvas.addEventListener('mousemove', (e) => {
+          const x = (e.offsetX / elCanvas.offsetWidth) * elCanvas.width;
+          const y = (e.offsetY / elCanvas.offsetHeight) * elCanvas.height;
+          circleX = x;
+          circleY = y;
+        });
+      } else {
+        elCanvas.removeEventListener('mousemove');
+      }
+    })
   }
 
   const ids = ['bgColor', 'strokeColor', 'circleWidth', 'circleGap', 'maxSegmentLength', 'segmentGap'];
