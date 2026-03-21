@@ -6,7 +6,7 @@ A creative coding experiment exploring interactive text rendering using p5.js an
 
 - Interactive text rendering using concentric circle segments.
 - Real-time parameter adjustment via UI controls.
-- Dynamic center positioning through canvas clicks.
+- Dynamic center positioning through canvas clicks and/or mouse hover.
 - Built with Webpack and SCSS.
 
 ## Tech Stack
@@ -15,6 +15,19 @@ A creative coding experiment exploring interactive text rendering using p5.js an
 - [canvas-sketch](https://github.com/mattdesl/canvas-sketch) - Framework for making generative art.
 - [Webpack](https://webpack.js.org/) - Module bundling.
 - [Sass](https://sass-lang.com/) - Styling.
+
+## Visuals
+
+### Cursor Interaction
+
+![Cursor Interaction Demo](./assets/interaction-demo.gif)
+
+*Interaction example.*
+
+### Controls Panel
+
+![Controls Panel Screenshot](./assets/controls-panel.png)
+*Control panel for real-time parameter tweaking.*
 
 ## Installation
 
